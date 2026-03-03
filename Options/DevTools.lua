@@ -51,15 +51,14 @@ local GetSpellTabInfo = function( index )
 end
 
 local GetSpellInfo = ns.GetUnpackedSpellInfo
-local GetSpellCooldown = C_Spell.GetSpellCooldown
+local GetSpellCooldown = function( spellID )
+    return ns.CooldownManager.GetCooldownInfo( spellID )
+end
 
 local GetSpellDescription = C_Spell.GetSpellDescription
 
 local GetSpellCharges = function( spellID )
-    local spellChargeInfo = C_Spell.GetSpellCharges( spellID )
-    if spellChargeInfo then
-        return spellChargeInfo.currentCharges, spellChargeInfo.maxCharges, spellChargeInfo.cooldownStartTime, spellChargeInfo.cooldownDuration, spellChargeInfo.chargeModRate
-    end
+    return ns.CooldownManager.GetChargeInfo( spellID )
 end
 
 local GetSpecialization = C_SpecializationInfo.GetSpecialization
