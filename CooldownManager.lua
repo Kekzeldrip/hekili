@@ -1,5 +1,5 @@
 -- CooldownManager.lua
--- Rotapop Cooldown Manager (CDM) for WoW 12.x
+-- Hekili Cooldown Manager (CDM) for WoW 12.x
 -- Replaces legacy C_Spell.GetSpellCooldown with C_CooldownViewer-based cooldown resolution.
 -- All cooldown state retrieval is centralized here; no other file should call C_Spell.GetSpellCooldown directly.
 
