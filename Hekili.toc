@@ -17,6 +17,7 @@ Utils.lua
 Formatting.lua
 MultilineEditor.lua
 Constants.lua
+CooldownManager.lua
 State.lua
 Events.lua
 

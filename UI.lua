@@ -28,11 +28,7 @@ local IsUsableSpell = C_Spell.IsSpellUsable
 local IsSpellOverlayed = C_SpellActivationOverlay.IsSpellOverlayed
 
 local GetSpellCooldown = function( spellID )
-    local spellCooldownInfo = C_Spell.GetSpellCooldown( spellID )
-    if spellCooldownInfo then
-        return spellCooldownInfo.startTime, spellCooldownInfo.duration, spellCooldownInfo.isEnabled, spellCooldownInfo.modRate
-    end
-    return 0, 0, false, 0
+    return ns.CooldownManager.GetCooldownInfo( spellID )
 end
 
 local GetSpecialization = C_SpecializationInfo.GetSpecialization
