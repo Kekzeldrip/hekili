@@ -183,7 +183,7 @@ local function Button_OnMouseUp( self, btn )
                 ns.UI.Buttons[i][j]:EnableMouse(mouseInteract)
             end
         end
-        ns.UI.Notification:EnableMouse( Hekili.Config )
+        if ns.UI.Notification then ns.UI.Notification:EnableMouse( Hekili.Config ) end
         -- Hekili:SetOption( { "locked" }, true )
         GameTooltip:Hide()
 
@@ -209,61 +209,63 @@ function ns.StartConfiguration( external )
     local ccolor = RAID_CLASS_COLORS[ select( 2, UnitClass( "player" ) ) ]
 
     -- Notification Panel
-    ns.UI.Notification.Mover = ns.UI.Notification.Mover or CreateFrame( "Frame", "HekiliNotificationMover", ns.UI.Notification, "BackdropTemplate" )
-    ns.UI.Notification.Mover:SetAllPoints( HekiliNotification )
-    ns.UI.Notification.Mover:SetBackdrop( {
-        bgFile = "Interface/Buttons/WHITE8X8",
-        edgeFile = "Interface/Buttons/WHITE8X8",
-        tile = false,
-        tileSize = 0,
-        edgeSize = 1,
-        insets = { left = 0, right = 0, top = 0, bottom = 0 }
-    } )
+    if ns.UI.Notification then
+        ns.UI.Notification.Mover = ns.UI.Notification.Mover or CreateFrame( "Frame", "HekiliNotificationMover", ns.UI.Notification, "BackdropTemplate" )
+        ns.UI.Notification.Mover:SetAllPoints( HekiliNotification )
+        ns.UI.Notification.Mover:SetBackdrop( {
+            bgFile = "Interface/Buttons/WHITE8X8",
+            edgeFile = "Interface/Buttons/WHITE8X8",
+            tile = false,
+            tileSize = 0,
+            edgeSize = 1,
+            insets = { left = 0, right = 0, top = 0, bottom = 0 }
+        } )
 
-    ns.UI.Notification.Mover:SetBackdropColor( 0, 0, 0, .8 )
-    ns.UI.Notification.Mover:SetBackdropBorderColor( ccolor.r, ccolor.g, ccolor.b, 1 )
-    ns.UI.Notification.Mover:Show()
+        ns.UI.Notification.Mover:SetBackdropColor( 0, 0, 0, .8 )
+        ns.UI.Notification.Mover:SetBackdropBorderColor( ccolor.r, ccolor.g, ccolor.b, 1 )
+        ns.UI.Notification.Mover:Show()
 
-    local f = ns.UI.Notification.Mover
+        local f = ns.UI.Notification.Mover
 
-    if not f.Header then
-        f.Header = f:CreateFontString( "HekiliNotificationHeader", "OVERLAY", "GameFontNormal" )
-        local path = f.Header:GetFont()
-        f.Header:SetFont( path, 18, "OUTLINE" )
-    end
-    f.Header:SetAllPoints( HekiliNotificationMover )
-    f.Header:SetText( "Notifications" )
-    f.Header:SetJustifyH( "CENTER" )
-    f.Header:Show()
-
-    if HekiliNotificationMover:GetFrameLevel() > HekiliNotification:GetFrameLevel() then
-        local orig = HekiliNotificationMover:GetFrameLevel()
-        HekiliNotification:SetFrameLevel(orig)
-        HekiliNotificationMover:SetFrameLevel(orig-1)
-    end
-
-    ns.UI.Notification:EnableMouse( true )
-    ns.UI.Notification:SetMovable( true )
-
-    HekiliNotification:SetScript( "OnMouseDown", Mover_OnMouseDown )
-    HekiliNotification:SetScript( "OnMouseUp", Mover_OnMouseUp )
-    HekiliNotification:SetScript( "OnEnter", function( self )
-        local H = Hekili
-
-        if H.Config then
-            Tooltip:SetOwner( self, "ANCHOR_TOPRIGHT" )
-
-            Tooltip:SetText( "Hekili: Notifications" )
-            Tooltip:AddLine( "Left-click and hold to move.", 1, 1, 1 )
-            Tooltip:AddLine( "Right-click to open Notification panel settings.", 1, 1, 1 )
-            Tooltip:Show()
+        if not f.Header then
+            f.Header = f:CreateFontString( "HekiliNotificationHeader", "OVERLAY", "GameFontNormal" )
+            local path = f.Header:GetFont()
+            f.Header:SetFont( path, 18, "OUTLINE" )
         end
-    end )
-    HekiliNotification:SetScript( "OnLeave", function(self)
-        Tooltip:Hide()
-    end )
+        f.Header:SetAllPoints( HekiliNotificationMover )
+        f.Header:SetText( "Notifications" )
+        f.Header:SetJustifyH( "CENTER" )
+        f.Header:Show()
 
-    Hekili:ProfileFrame( "NotificationFrame", HekiliNotification )
+        if HekiliNotificationMover:GetFrameLevel() > HekiliNotification:GetFrameLevel() then
+            local orig = HekiliNotificationMover:GetFrameLevel()
+            HekiliNotification:SetFrameLevel(orig)
+            HekiliNotificationMover:SetFrameLevel(orig-1)
+        end
+
+        ns.UI.Notification:EnableMouse( true )
+        ns.UI.Notification:SetMovable( true )
+
+        HekiliNotification:SetScript( "OnMouseDown", Mover_OnMouseDown )
+        HekiliNotification:SetScript( "OnMouseUp", Mover_OnMouseUp )
+        HekiliNotification:SetScript( "OnEnter", function( self )
+            local H = Hekili
+
+            if H.Config then
+                Tooltip:SetOwner( self, "ANCHOR_TOPRIGHT" )
+
+                Tooltip:SetText( "Hekili: Notifications" )
+                Tooltip:AddLine( "Left-click and hold to move.", 1, 1, 1 )
+                Tooltip:AddLine( "Right-click to open Notification panel settings.", 1, 1, 1 )
+                Tooltip:Show()
+            end
+        end )
+        HekiliNotification:SetScript( "OnLeave", function(self)
+            Tooltip:Hide()
+        end )
+
+        Hekili:ProfileFrame( "NotificationFrame", HekiliNotification )
+    end
 
     for i, v in pairs( ns.UI.Displays ) do
         if v.Backdrop then
@@ -431,9 +433,11 @@ function ns.StopConfiguration()
         end
     end
 
-    HekiliNotification:EnableMouse( false )
-    HekiliNotification:SetMovable( false )
-    HekiliNotification.Mover:Hide()
+    if HekiliNotification then
+        HekiliNotification:EnableMouse( false )
+        HekiliNotification:SetMovable( false )
+        if HekiliNotification.Mover then HekiliNotification.Mover:Hide() end
+    end
     -- HekiliNotification.Mover.Header:Hide()
 end
 
@@ -939,7 +943,6 @@ do
 
         -- These re-register flash frames in SpellFlash (after 0.5 - 1.0s).
         ACTIONBAR_HIDEGRID = 1,
-        LEARNED_SPELL_IN_TAB = 1,
         CHARACTER_POINTS_CHANGED = 1,
         ACTIVE_TALENT_GROUP_CHANGED = 1,
         UPDATE_MACROS = 1,
