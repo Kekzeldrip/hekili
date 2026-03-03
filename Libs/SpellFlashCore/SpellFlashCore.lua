@@ -667,7 +667,6 @@ local function RegisterAll()
     a:SetTimer("RegisterButtons", 1, 0, RegisterButtons)
 end
 Event.ACTIONBAR_HIDEGRID = RegisterAll
-Event.LEARNED_SPELL_IN_TAB = RegisterAll
 Event.CHARACTER_POINTS_CHANGED = RegisterAll
 Event.ACTIVE_TALENT_GROUP_CHANGED = RegisterAll
 function Event.ACTIONBAR_SLOT_CHANGED(event, arg1)
